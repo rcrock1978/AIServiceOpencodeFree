@@ -13,7 +13,7 @@ public class ConversationRepository : IConversationRepository
         _connectionString = connectionString;
     }
 
-    public async Task<Conversation> CreateConversationAsync(Guid userId, string title)
+    public async Task<Conversation> CreateConversationAsync(Guid? userId, string title)
     {
         const string sql = """
             INSERT INTO ai_conversations (id, user_id, title, is_active, created_at, updated_at)

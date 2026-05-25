@@ -1,6 +1,7 @@
 using AiService.Configuration;
 using Microsoft.CognitiveServices.Speech;
 using Microsoft.CognitiveServices.Speech.Audio;
+using Microsoft.Extensions.Options;
 
 namespace AiService.Services;
 
@@ -9,10 +10,10 @@ public class VoiceService : IVoiceService
     private readonly AzureSpeechOptions _options;
     private readonly bool _isConfigured;
 
-    public VoiceService(AzureSpeechOptions options)
+    public VoiceService(IOptions<AzureSpeechOptions> options)
     {
-        _options = options;
-        _isConfigured = !string.IsNullOrEmpty(options.ApiKey);
+        _options = options.Value;
+        _isConfigured = !string.IsNullOrEmpty(_options.ApiKey);
     }
 
     public async Task<string> TranscribeAsync(byte[] audioData)

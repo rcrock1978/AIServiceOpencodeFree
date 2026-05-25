@@ -28,7 +28,7 @@ public class ChatServiceTests
         _chatProvider.Setup(p => p.GenerateChatResponseAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<List<Message>?>()))
             .ReturnsAsync("Here are some products.");
 
-        _conversationRepo.Setup(r => r.CreateConversationAsync(It.IsAny<Guid>(), It.IsAny<string>()))
+        _conversationRepo.Setup(r => r.CreateConversationAsync(It.IsAny<Guid?>(), It.IsAny<string>()))
             .ReturnsAsync(new Conversation { Id = Guid.NewGuid(), Title = "Chat" });
 
         _conversationRepo.Setup(r => r.AddMessageAsync(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>()))

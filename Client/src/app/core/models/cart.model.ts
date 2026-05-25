@@ -52,3 +52,11 @@ export interface CheckoutResponse {
   status: string;
   totalAmount: number;
 }
+
+export interface CartResponse {
+  cart: Cart;
+}
+
+export interface OrderHistoryResponse {
+  orders: Order[];
+}

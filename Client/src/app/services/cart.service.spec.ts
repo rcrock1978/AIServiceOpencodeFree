@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { CartService } from './cart.service';
-import { Cart, Order, CheckoutResponse } from '../core/models/cart.model';
+import { Cart, Order, CheckoutResponse, CartResponse, OrderHistoryResponse } from '../core/models/cart.model';
 
 describe('CartService', () => {
   let service: CartService;
@@ -24,24 +24,26 @@ describe('CartService', () => {
   });
 
   it('should fetch cart and update signal', () => {
-    const mockCart: Cart = {
-      id: 'cart-1',
-      userId: 'user-1',
-      items: [
-        { id: 'item-1', cartId: 'cart-1', productId: 'p-1', quantity: 2, product: { id: 'p-1', name: 'Shoe', price: 49.99, description: '', brand: 'Nike', type: 'shoes', imageUrl: '', rating: 4, stock: 5, createdAt: '', updatedAt: '' }, createdAt: '' },
-      ],
-      createdAt: '',
-      updatedAt: '',
+    const mockResponse: CartResponse = {
+      cart: {
+        id: 'cart-1',
+        userId: 'user-1',
+        items: [
+          { id: 'item-1', cartId: 'cart-1', productId: 'p-1', quantity: 2, product: { id: 'p-1', name: 'Shoe', price: 49.99, description: '', brand: 'Nike', type: 'shoes', imageUrl: '', rating: 4, stock: 5, createdAt: '', updatedAt: '' }, createdAt: '' },
+        ],
+        createdAt: '',
+        updatedAt: '',
+      },
     };
 
-    service.getCart().subscribe(cart => {
-      expect(cart.items.length).toBe(1);
-      service.setCart(cart);
+    service.getCart().subscribe(response => {
+      expect(response.cart.items.length).toBe(1);
+      service.setCart(response.cart);
     });
 
     const req = httpMock.expectOne('/api/cart');
     expect(req.request.method).toBe('GET');
-    req.flush(mockCart);
+    req.flush(mockResponse);
   });
 
   it('should compute itemCount and totalPrice', () => {
@@ -63,12 +65,17 @@ describe('CartService', () => {
   });
 
   it('should add item', () => {
-    service.addItem('p-1', 1).subscribe();
+    const mockResponse: CartResponse = {
+      cart: { id: 'cart-1', userId: 'user-1', items: [], createdAt: '', updatedAt: '' },
+    };
+    service.addItem('p-1', 1).subscribe(response => {
+      expect(response.cart.id).toBe('cart-1');
+    });
 
     const req = httpMock.expectOne('/api/cart/add');
     expect(req.request.method).toBe('POST');
     expect(req.request.body).toEqual({ productId: 'p-1', quantity: 1 });
-    req.flush({ id: 'cart-1', userId: 'user-1', items: [], createdAt: '', updatedAt: '' });
+    req.flush(mockResponse);
   });
 
   it('should checkout', () => {
@@ -85,16 +92,18 @@ describe('CartService', () => {
   });
 
   it('should fetch orders', () => {
-    const mockOrders: Order[] = [
-      { id: 'order-1', userId: 'user-1', totalAmount: 49.99, status: 'confirmed', shippingAddress: '123 St', items: [], createdAt: '', updatedAt: '' },
-    ];
+    const mockResponse: OrderHistoryResponse = {
+      orders: [
+        { id: 'order-1', userId: 'user-1', totalAmount: 49.99, status: 'confirmed', shippingAddress: '123 St', items: [], createdAt: '', updatedAt: '' },
+      ],
+    };
 
-    service.getOrders().subscribe(orders => {
-      expect(orders.length).toBe(1);
+    service.getOrders().subscribe(response => {
+      expect(response.orders.length).toBe(1);
     });
 
     const req = httpMock.expectOne('/api/orders');
     expect(req.request.method).toBe('GET');
-    req.flush(mockOrders);
+    req.flush(mockResponse);
   });
 });

@@ -141,7 +141,7 @@ export class OrderHistoryComponent implements OnInit {
 
   ngOnInit(): void {
     this.cartService.getOrders().subscribe({
-      next: (orders) => this.orders.set(orders),
+      next: (response) => this.orders.set(response.orders ?? []),
       error: () => this.snackBar.open('Failed to load orders', 'Close', { duration: 3000 })
     });
   }

@@ -160,6 +160,7 @@ export class CartComponent implements OnInit {
 
   ngOnInit(): void {
     this.cartService.getCart().subscribe({
+      next: (response) => this.cartService.setCart(response.cart),
       error: () => this.snackBar.open('Failed to load cart', 'Close', { duration: 3000 })
     });
   }
@@ -167,12 +168,14 @@ export class CartComponent implements OnInit {
   updateQuantity(item: any, newQty: number): void {
     if (newQty < 1) return;
     this.cartService.addItem(item.productId, newQty).subscribe({
+      next: (response) => this.cartService.setCart(response.cart),
       error: () => this.snackBar.open('Failed to update quantity', 'Close', { duration: 3000 })
     });
   }
 
   removeItem(item: any): void {
     this.cartService.removeItem(item.id).subscribe({
+      next: () => this.cartService.getCart().subscribe(response => this.cartService.setCart(response.cart)),
       error: () => this.snackBar.open('Failed to remove item', 'Close', { duration: 3000 })
     });
   }

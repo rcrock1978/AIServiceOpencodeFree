@@ -35,23 +35,6 @@ public class ChatService : IChatService
         IChatProvider chatProvider,
         ISearchService searchService,
         IWebSearchProvider webSearchProvider,
-        IConfiguration configuration)
-    {
-        _embeddingProvider = embeddingProvider;
-        _chatProvider = chatProvider;
-        _searchService = searchService;
-        _webSearchProvider = webSearchProvider;
-
-        var connectionString = configuration.GetConnectionString("PgVector")
-            ?? throw new InvalidOperationException("Connection string 'PgVector' not found.");
-        _conversationRepository = new Repositories.ConversationRepository(connectionString);
-    }
-
-    public ChatService(
-        IEmbeddingProvider embeddingProvider,
-        IChatProvider chatProvider,
-        ISearchService searchService,
-        IWebSearchProvider webSearchProvider,
         IConversationRepository conversationRepository)
     {
         _embeddingProvider = embeddingProvider;
@@ -92,7 +75,7 @@ public class ChatService : IChatService
 
         var reply = await _chatProvider.GenerateChatResponseAsync(SystemPrompt, finalMessage);
 
-        var conversation = await _conversationRepository.CreateConversationAsync(userId: Guid.Empty, title: "Chat");
+        var conversation = await _conversationRepository.CreateConversationAsync(userId: null, title: "Chat");
 
         await _conversationRepository.AddMessageAsync(conversation.Id, "user", message);
         await _conversationRepository.AddMessageAsync(conversation.Id, "assistant", reply);

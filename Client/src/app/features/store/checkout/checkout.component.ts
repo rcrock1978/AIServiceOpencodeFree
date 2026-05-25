@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -141,7 +141,7 @@ import { CartService } from '../../../services/cart.service';
     }
   `]
 })
-export class CheckoutComponent {
+export class CheckoutComponent implements OnInit {
   private cartService = inject(CartService);
   private router = inject(Router);
   private snackBar = inject(MatSnackBar);
@@ -158,6 +158,15 @@ export class CheckoutComponent {
   zipCode = '';
 
   submitted = signal(false);
+
+  ngOnInit(): void {
+    if (!this.cart()) {
+      this.cartService.getCart().subscribe({
+        next: (response) => this.cartService.setCart(response.cart),
+        error: () => this.snackBar.open('Failed to load cart', 'Close', { duration: 3000 })
+      });
+    }
+  }
 
   onSubmit(): void {
     if (!this.fullName || !this.addressLine1 || !this.city || !this.state || !this.zipCode) {
