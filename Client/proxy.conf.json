@@ -1,0 +1,16 @@
+{
+  "/api": {
+    "target": "http://localhost:8090",
+    "secure": false,
+    "pathRewrite": {
+      "^/api": ""
+    }
+  },
+  "/catalog": {
+    "target": "http://localhost:8010",
+    "secure": false,
+    "pathRewrite": {
+      "^/catalog": ""
+    }
+  }
+}

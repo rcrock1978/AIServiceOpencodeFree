@@ -1,0 +1,66 @@
+# .NET 10
+bin/
+obj/
+out/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.log
+*.ide
+*.dbmdl
+*.dotCover
+*.ncrunch*
+_ReSharper*/
+*.resharper
+*.[Rr]e[Ss]harper
+TestResults/
+*.vs/
+.vscode/
+.vsconfig
+*.PublishSettings
+*.azurePubxml
+
+# Rider IDE
+.idea/
+
+# ASP.NET Core
+ScaffoldingReadMe.txt
+appsettings.*.json
+appsettings.Development.json
+
+# Angular 21 (Client/)
+Client/node_modules/
+Client/dist/
+Client/.angular/
+Client/tmp/
+Client/temp/
+Client/npm-debug.log*
+Client/yarn-error.log*
+Client/yarn-debug.log*
+Client/coverage/
+
+# Package locks (optional - uncomment if you want to ignore)
+# package-lock.json
+# pnpm-lock.yaml
+# yarn.lock
+
+# Environment files (NEVER commit!)
+*.env
+*.env.*
+.env.local
+.env.local.*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+*.swp
+*.swo
+*~
+*.lock
+
+# Coverage
+coverage/
+*.lcov
