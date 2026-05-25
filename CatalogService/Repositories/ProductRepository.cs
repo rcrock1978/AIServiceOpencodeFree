@@ -16,11 +16,13 @@ public class ProductRepository : IProductRepository
 
     private NpgsqlConnection CreateConnection() => new(_connectionString);
 
+    private const string ProductColumns = "id, name, description, price, brand, type, image_url, rating, stock, created_at, updated_at";
+
     public async Task<IEnumerable<Product>> GetAllAsync(string? brand, string? type, string? search, string? sortBy, int page, int pageSize)
     {
         using var conn = CreateConnection();
 
-        var sql = "SELECT * FROM products WHERE 1=1";
+        var sql = $"SELECT {ProductColumns} FROM products WHERE 1=1";
         var parameters = new DynamicParameters();
 
         if (!string.IsNullOrWhiteSpace(brand))
@@ -62,7 +64,7 @@ public class ProductRepository : IProductRepository
     {
         using var conn = CreateConnection();
         return await conn.QueryFirstOrDefaultAsync<Product>(
-            "SELECT * FROM products WHERE id = @Id",
+            $"SELECT {ProductColumns} FROM products WHERE id = @Id",
             new { Id = id });
     }
 
